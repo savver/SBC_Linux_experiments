@@ -1,0 +1,285 @@
+done.
+Begin: Mounting root file system ... Begin: Running /scripts/local-top ... done.
+Begin: Running /scripts/local-premount ... Scanning for Btrfs filesystems
+done.
+Begin: Will now check root file system ... fsck from util-linux 2.37.2
+[/usr/sbin/fsck.ext4 (1) -- /dev/mmcblk0p2] fsck.ext4 -a -C0 /dev/mmcblk0p2
+opi_root: recovering journal
+opi_root: clean, 52019/3648512 files, 784239/14680064 blocks
+done.
+done.
+Begin: Running /scripts/local-bottom ... done.
+Begin: Running /scripts/init-bottom ... done.
+
+Welcome to Orange Pi 1.0.8 Jammy!
+
+-.mount
+[  OK  ] Created slice Slice /system/modprobe.
+[  OK  ] Created slice Slice /system/serial-getty.
+[  OK  ] Created slice Slice /system/systemd-fsck.
+[  OK  ] Created slice User and Session Slice.
+[  OK  ] Started Forward Password R…uests to Wall Directory Watch.
+[  OK  ] Set up automount Arbitrary…s File System Automount Point.
+[  OK  ] Reached target Slice Units.
+[  OK  ] Reached target Swaps.
+[  OK  ] Reached target System Time Set.
+[  OK  ] Reached target Local Verity Protected Volumes.
+[  OK  ] Listening on RPCbind Server Activation Socket.
+[  OK  ] Listening on Syslog Socket.
+[  OK  ] Listening on fsck to fsckd communication Socket.
+[  OK  ] Listening on initctl Compatibility Named Pipe.
+[  OK  ] Listening on Journal Audit Socket.
+[  OK  ] Listening on Journal Socket (/dev/log).
+[  OK  ] Listening on Journal Socket.
+[  OK  ] Listening on udev Control Socket.
+[  OK  ] Listening on udev Kernel Socket.
+         Mounting Huge Pages File System...
+         Mounting POSIX Message Queue File System...
+         Mounting Kernel Debug File System...
+         Mounting Kernel Trace File System...
+         Starting Restore / save the current clock...
+         Starting Set the console keyboard layout...
+         Starting Create List of Static Device Nodes...
+         Starting Load Kernel Module configfs...
+         Starting Load Kernel Module drm...
+         Starting Load Kernel Module efi_pstore...
+         Starting Load Kernel Module fuse...
+[  OK  ] Started Nameserver information manager.
+resolvconf.service
+[  OK  ] Reached target Preparation for Network.
+         Starting Load Kernel Modules...
+         Starting Remount Root and Kernel File Systems...
+         Starting Coldplug All udev Devices...
+[  OK  ] Mounted Huge Pages File System.
+[  OK  ] Mounted POSIX Message Queue File System.
+dev-hugepages.mount
+dev-mqueue.mount
+[  OK  ] Mounted Kernel Debug File System.
+sys-kernel-debug.mount
+[  OK  ] Mounted Kernel Trace File System.
+sys-kernel-tracing.mount
+[  OK  ] Finished Restore / save the current clock.
+fake-hwclock.service
+[  OK  ] Finished Create List of Static Device Nodes.
+kmod-static-nodes.service
+[  OK  ] Finished Load Kernel Module configfs.
+[  OK  ] Finished Load Kernel Module drm.
+[  OK  ] Finished Load Kernel Module efi_pstore.
+[  OK  ] Finished Load Kernel Module fuse.
+[  OK  ] Finished Load Kernel Modules.
+systemd-modules-load.service
+[  OK  ] Finished Remount Root and Kernel File Systems.
+systemd-remount-fs.service
+         Mounting FUSE Control File System...
+         Mounting Kernel Configuration File System...
+         Starting Load/Save Random Seed...
+         Starting Apply Kernel Variables...
+         Starting Create System Users...
+[  OK  ] Mounted FUSE Control File System.
+sys-fs-fuse-connections.mount
+[  OK  ] Mounted Kernel Configuration File System.
+sys-kernel-config.mount
+run-credentials-systemd\x2dsysusers.service.mount
+[  OK  ] Finished Load/Save Random Seed.
+systemd-random-seed.service
+[  OK  ] Finished Create System Users.
+systemd-sysusers.service
+[  OK  ] Finished Apply Kernel Variables.
+systemd-sysctl.service
+         Starting Create Static Device Nodes in /dev...
+[  OK  ] Finished Set the console keyboard layout.
+keyboard-setup.service
+[  OK  ] Finished Create Static Device Nodes in /dev.
+systemd-tmpfiles-setup-dev.service
+[  OK  ] Reached target Preparation for Local File Systems.
+         Mounting /tmp...
+         Starting Rule-based Manage…for Device Events and Files...
+[  OK  ] Mounted /tmp.
+tmp.mount
+[  OK  ] Started Rule-based Manager for Device Events and Files.
+systemd-udevd.service
+[  OK  ] Finished Coldplug All udev Devices.
+systemd-udev-trigger.service
+         Starting Helper to synchronize boot up for ifupdown...
+         Starting Show Plymouth Boot Screen...
+[  OK  ] Finished Helper to synchronize boot up for ifupdown.
+ifupdown-pre.service
+[  OK  ] Started Show Plymouth Boot Screen.
+plymouth-start.service
+[  OK  ] Started Forward Password R…s to Plymouth Directory Watch.
+[  OK  ] Reached target Local Encrypted Volumes.
+[  OK  ] Found device /dev/ttyS2.
+[  OK  ] Found device /dev/disk/by-uuid/F3B2-BD75.
+         Starting File System Check…/dev/disk/by-uuid/F3B2-BD75...
+[  OK  ] Started File System Check Daemon to report status.
+systemd-fsckd.service
+[  OK  ] Finished File System Check…n /dev/disk/by-uuid/F3B2-BD75.
+systemd-fsck@dev-disk-by\x2duuid-F3B2\x2dBD75.service
+         Mounting /boot...
+[  OK  ] Mounted /boot.
+boot.mount
+[  OK  ] Reached target Local File Systems.
+         Starting Load AppArmor profiles...
+         Starting Set console font and keymap...
+         Starting Orange Pi ZRAM config...
+         Starting Tell Plymouth To Write Out Runtime Data...
+         Starting Set Up Additional Binary Formats...
+         Starting Manage USB device functions...
+[  OK  ] Finished Set console font and keymap.
+console-setup.service
+[  OK  ] Finished Tell Plymouth To Write Out Runtime Data.
+plymouth-read-write.service
+[  OK  ] Listening on Load/Save RF …itch Status /dev/rfkill Watch.
+         Mounting Arbitrary Executable File Formats File System...
+         Starting Load Kernel Module efi_pstore...
+         Starting Load/Save RF Kill Switch Status...
+[  OK  ] Mounted Arbitrary Executable File Formats File System.
+proc-sys-fs-binfmt_misc.mount
+[  OK  ] Finished Load Kernel Module efi_pstore.
+[  OK  ] Finished Set Up Additional Binary Formats.
+systemd-binfmt.service
+systemd-rfkill.service
+[  OK  ] Started Load/Save RF Kill Switch Status.
+         Starting Load Kernel Module efi_pstore...
+[  OK  ] Finished Load AppArmor profiles.
+apparmor.service
+[  OK  ] Finished Load Kernel Module efi_pstore.
+         Starting Raise network interfaces...
+dev-zram0.swap
+[  OK  ] Finished Orange Pi ZRAM config.
+orangepi-zram-config.service
+         Starting Orange Pi memory supported logging...
+var-log.hdd.mount
+var-log.mount
+[  OK  ] Finished Raise network interfaces.
+networking.service
+         Starting Load Kernel Module efi_pstore...
+[  OK  ] Finished Load Kernel Module efi_pstore.
+[  OK  ] Started Manage USB device functions.
+[  OK  ] Finished Orange Pi memory supported logging.
+orangepi-ramlog.service
+         Starting Journal Service...
+[  OK  ] Started Journal Service.
+systemd-journald.service
+         Starting Flush Journal to Persistent Storage...
+[  OK  ] Finished Flush Journal to Persistent Storage.
+systemd-journal-flush.service
+         Starting Create Volatile Files and Directories...
+[  OK  ] Finished Create Volatile Files and Directories.
+systemd-tmpfiles-setup.service
+         Mounting RPC Pipe File System...
+[  OK  ] Started Entropy Daemon based on the HAVEGE algorithm.
+haveged.service
+         Starting RPC bind portmap service...
+         Starting Network Name Resolution...
+         Starting Record System Boot/Shutdown in UTMP...
+[  OK  ] Mounted RPC Pipe File System.
+run-rpc_pipefs.mount
+[  OK  ] Started RPC bind portmap service.
+rpcbind.service
+[  OK  ] Reached target rpc_pipefs.target.
+[  OK  ] Reached target RPC Port Mapper.
+[  OK  ] Reached target NFS client services.
+[  OK  ] Reached target Preparation for Remote File Systems.
+[  OK  ] Reached target Remote File Systems.
+[  OK  ] Finished Record System Boot/Shutdown in UTMP.
+[  OK  ] Reached target System Initialization.
+[  OK  ] Started resolvconf-pull-resolved.path.systemd-update-utmp.service
+
+[  OK  ] Started Daily Cleanup of Temporary Directories.
+[  OK  ] Reached target Path Units.
+[  OK  ] Listening on D-Bus System Message Bus Socket.
+         Starting Docker Socket for the API...
+         Starting Orange Pi hardware monitoring...
+         Starting Orange Pi hardware optimization...
+[  OK  ] Listening on Docker Socket for the API.
+[  OK  ] Reached target Socket Units.
+[  OK  ] Finished Orange Pi hardware monitoring.
+orangepi-hardware-monitor.service
+[  OK  ] Finished Orange Pi hardware optimization.
+[  OK  ] Reached target Basic System.
+orangepi-hardware-optimize.service
+         Starting Save/Restore Sound Card State...
+         Starting Bluetooth service...
+[  OK  ] Started Regular background program processing daemon.
+cron.service
+[  OK  ] Started D-Bus System Message Bus.
+dbus.service
+         Starting Network Manager...
+[  OK  ] Started Save initial kernel messages after boot.
+dmesg.service
+         Starting Remove Stale Onli…t4 Metadata Check Snapshots...
+         Starting Initialize hardware monitoring sensors...
+         Starting LSB: Load kernel …d to enable cpufreq scaling...
+         Starting Dispatcher daemon for systemd-networkd...
+[  OK  ] Started Orange Pi first run tasks.
+orangepi-firstrun.service
+         Starting System Logging Service...
+         Starting Self Monitoring a…g Technology (SMART) Daemon...
+         Starting Resets System Activity Logs...
+         Starting User Login Management...
+         Starting WPA supplicant...
+alsa-restore.service
+[  OK  ] Finished Save/Restore Sound Card State.
+[  OK  ] Reached target Sound Card.
+[  OK  ] Finished Resets System Activity Logs.
+sysstat.service
+[  OK  ] Finished Initialize hardware monitoring sensors.
+lm-sensors.service
+[  OK  ] Started System Logging Service.
+rsyslog.service
+[  OK  ] Started WPA supplicant.
+wpa_supplicant.service
+[  OK  ] Started Self Monitoring an…ing Technology (SMART) Daemon.
+smartmontools.service
+[  OK  ] Finished Remove Stale Onli…ext4 Metadata Check Snapshots.
+[  OK  ] Started Network Manager.
+NetworkManager.service
+[  OK  ] Started Network Name Resolution.
+[  OK  ] Reached target Network.
+[  OK  ] Reached target Network is Online.
+systemd-resolved.service
+         Starting chrony, an NTP client/server...
+         Starting containerd container runtime...
+         Starting dnsmasq - A light…DHCP and caching DNS server...
+         Starting LSB: Advanced IEEE 802.11 management daemon...
+         Starting OpenVPN service...
+         Starting /etc/rc.local Compatibility...
+         Starting resolvconf-pull-resolved.service...
+         Starting OpenBSD Secure Shell server...
+         Starting Permit User Sessions...
+[  OK  ] Started vnStat network traffic monitor.
+vnstat.service
+[  OK  ] Started LSB: Load kernel m…ded to enable cpufreq scaling.
+loadcpufreq.service
+[  OK  ] Started LSB: Advanced IEEE 802.11 management daemon.
+[  OK  ] Finished OpenVPN service.
+hostapd.service
+openvpn.service
+[  OK  ] Started /etc/rc.local Compatibility.
+rc-local.service
+systemd-user-sessions.service
+[  OK  ] Finished Permit User Sessions.
+         Starting LSB: set CPUFreq kernel parameters...
+         Starting Hold until boot process finishes up...
+         Starting Terminate Plymouth Boot Screen...
+         Starting Hostname Service...
+
+orangepi3b login: orangepi (automatic login)
+
+  ___  ____ ___   _____ ____
+ / _ \|  _ \_ _| |___ /| __ )
+| | | | |_) | |    |_ \|  _ \
+| |_| |  __/| |   ___) | |_) |
+ \___/|_|  |___| |____/|____/
+
+Welcome to Orange Pi 1.0.8 Jammy with Linux 6.6.0-rc5-rockchip-rk356x
+
+System load:   37%              Up time:       0 min
+Memory usage:  6% of 3.83G      IP:
+CPU temp:      33°C             Usage of /:    4% of 56G
+
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+
+orangepi@orangepi3b:~$

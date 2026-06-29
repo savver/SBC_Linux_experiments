@@ -1,0 +1,67 @@
+orangepi@orangepi3b:~$ lsmod
+Module                  Size  Used by
+algif_hash             12288  1
+algif_skcipher         12288  1
+af_alg                 24576  6 algif_hash,algif_skcipher
+bnep                   28672  2
+sunrpc                634880  1
+lz4hc                  12288  0
+lz4                    12288  0
+zram                   28672  3
+binfmt_misc            24576  1
+nls_iso8859_1          12288  1
+hci_uart              147456  0
+btqca                  24576  1 hci_uart
+btrtl                  32768  1 hci_uart
+btintel                45056  1 hci_uart
+btbcm                  24576  1 hci_uart
+brcmfmac_wcc           16384  0
+btsdio                 16384  0
+bluetooth             806912  30 btrtl,btqca,btsdio,btintel,hci_uart,btbcm,bnep
+pwm_fan                16384  0
+brcmfmac              405504  1 brcmfmac_wcc
+brcmutil               24576  1 brcmfmac
+snd_soc_simple_card    20480  0
+snd_soc_simple_card_utils    32768  1 snd_soc_simple_card
+cfg80211              983040  1 brcmfmac
+rfkill                 28672  6 bluetooth,cfg80211
+rk_crypto2             36864  1
+sm3_generic            12288  1 rk_crypto2
+sm3                    20480  1 sm3_generic
+snd_soc_rockchip_i2s_tdm    32768  4
+snd_soc_rk817          40960  1
+snd_soc_hdmi_codec     24576  1
+hantro_vpu            262144  0
+snd_soc_core          294912  5 snd_soc_rockchip_i2s_tdm,snd_soc_hdmi_codec,snd_soc_rk817,snd_soc_simple_card_utils,snd_soc_simple_card
+snd_compress           24576  1 snd_soc_core
+snd_pcm_dmaengine      16384  1 snd_soc_core
+snd_pcm               139264  5 snd_soc_hdmi_codec,snd_compress,snd_soc_simple_card_utils,snd_soc_core,snd_pcm_dmaengine
+v4l2_vp9               24576  1 hantro_vpu
+rockchip_rga           20480  0
+snd_timer              40960  1 snd_pcm
+v4l2_h264              16384  1 hantro_vpu
+videobuf2_dma_contig    24576  1 hantro_vpu
+snd                   106496  5 snd_soc_hdmi_codec,snd_timer,snd_compress,snd_soc_core,snd_pcm
+videobuf2_dma_sg       16384  1 rockchip_rga
+v4l2_mem2mem           40960  2 hantro_vpu,rockchip_rga
+videobuf2_memops       16384  2 videobuf2_dma_contig,videobuf2_dma_sg
+videobuf2_v4l2         32768  3 hantro_vpu,rockchip_rga,v4l2_mem2mem
+soundcore              12288  1 snd
+rk817_charger          20480  0
+videodev              294912  4 videobuf2_v4l2,hantro_vpu,rockchip_rga,v4l2_mem2mem
+videobuf2_common       65536  7 videobuf2_dma_contig,videobuf2_v4l2,hantro_vpu,rockchip_rga,videobuf2_dma_sg,v4l2_mem2mem,videobuf2_memops
+mc                     73728  5 videodev,videobuf2_v4l2,hantro_vpu,videobuf2_common,v4l2_mem2mem
+cpufreq_dt             16384  0
+sch_fq_codel           16384  3
+ip_tables              32768  0
+x_tables               57344  1 ip_tables
+autofs4                45056  2
+motorcomm              24576  1
+display_connector      16384  0
+spi_rockchip_sfc       16384  0
+dwmac_rk               28672  0
+dw_hdmi_cec            12288  0
+stmmac_platform        24576  1 dwmac_rk
+stmmac                241664  3 stmmac_platform,dwmac_rk
+dw_hdmi_i2s_audio      12288  0
+pcs_xpcs               24576  1 stmmac

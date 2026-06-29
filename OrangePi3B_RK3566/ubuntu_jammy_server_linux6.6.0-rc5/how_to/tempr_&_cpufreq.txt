@@ -1,0 +1,112 @@
+Linux orangepi3b 6.6.0-rc5-rockchip-rk356x #1.0.8 SMP PREEMPT Mon Nov 18 19:23:24 CST 2024 aarch64 aarch64 aarch64 GNU/Linux
+
+temperature:
+	cat /sys/class/thermal/thermal_zone*/temp
+	sensors
+	
+cpu freq:
+	cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq
+	cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq
+	cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_min_freq
+	cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
+	cpufreq-info
+	cpufreq-info | grep stats
+	
+================================================
+orangepi@orangepi3b:~$ cat /sys/class/thermal/thermal_zone*/temp
+43750
+40625
+------------------------------------------------
+orangepi@orangepi3b:~$ sensors
+gpu_thermal-virtual-0
+Adapter: Virtual device
+temp1:        +40.6°C
+
+nvme-pci-0100
+Adapter: PCI adapter
+Composite:    +36.9°C  (low  = -273.1°C, high = +84.8°C)
+                       (crit = +84.8°C)
+Sensor 1:     +36.9°C  (low  = -273.1°C, high = +65261.8°C)
+Sensor 2:     +38.9°C  (low  = -273.1°C, high = +65261.8°C)
+
+cpu_thermal-virtual-0
+Adapter: Virtual device
+temp1:        +43.8°C
+--------------------------------------------------
+pi@orangepi3b:~$ cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq
+408000
+408000
+--------------------------------------------------
+orangepi@orangepi3b:~$ cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq
+1800000
+--------------------------------------------------
+orangepi@orangepi3b:~$ cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_min_freq
+408000
+--------------------------------------------------
+cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
+408000 600000 816000 1104000 1416000 1608000 1800000 
+--------------------------------------------------
+orangepi@orangepi3b:~$ cpufreq-info
+cpufrequtils 008: cpufreq-info (C) Dominik Brodowski 2004-2009
+Report errors and bugs to cpufreq@vger.kernel.org, please.
+analyzing CPU 0:
+  driver: cpufreq-dt
+  CPUs which run at the same hardware frequency: 0 1 2 3
+  CPUs which need to have their frequency coordinated by software: 0 1 2 3
+  maximum transition latency: 149 us.
+  hardware limits: 408 MHz - 1.80 GHz
+  available frequency steps: 408 MHz, 600 MHz, 816 MHz, 1.10 GHz, 1.42 GHz, 1.61 GHz, 1.80 GHz
+  available cpufreq governors: conservative, ondemand, userspace, powersave, performance, schedutil
+  current policy: frequency should be within 408 MHz and 1.80 GHz.
+                  The governor "ondemand" may decide which speed to use
+                  within this range.
+  current CPU frequency is 408 MHz (asserted by call to hardware).
+  cpufreq stats: 408 MHz:96.79%, 600 MHz:0.72%, 816 MHz:0.10%, 1.10 GHz:0.00%, 1.42 GHz:0.01%, 1.61 GHz:0.01%, 1.80 GHz:2.37%  (337)
+analyzing CPU 1:
+  driver: cpufreq-dt
+  CPUs which run at the same hardware frequency: 0 1 2 3
+  CPUs which need to have their frequency coordinated by software: 0 1 2 3
+  maximum transition latency: 149 us.
+  hardware limits: 408 MHz - 1.80 GHz
+  available frequency steps: 408 MHz, 600 MHz, 816 MHz, 1.10 GHz, 1.42 GHz, 1.61 GHz, 1.80 GHz
+  available cpufreq governors: conservative, ondemand, userspace, powersave, performance, schedutil
+  current policy: frequency should be within 408 MHz and 1.80 GHz.
+                  The governor "ondemand" may decide which speed to use
+                  within this range.
+  current CPU frequency is 408 MHz (asserted by call to hardware).
+  cpufreq stats: 408 MHz:96.79%, 600 MHz:0.72%, 816 MHz:0.10%, 1.10 GHz:0.00%, 1.42 GHz:0.01%, 1.61 GHz:0.01%, 1.80 GHz:2.37%  (337)
+analyzing CPU 2:
+  driver: cpufreq-dt
+  CPUs which run at the same hardware frequency: 0 1 2 3
+  CPUs which need to have their frequency coordinated by software: 0 1 2 3
+  maximum transition latency: 149 us.
+  hardware limits: 408 MHz - 1.80 GHz
+  available frequency steps: 408 MHz, 600 MHz, 816 MHz, 1.10 GHz, 1.42 GHz, 1.61 GHz, 1.80 GHz
+  available cpufreq governors: conservative, ondemand, userspace, powersave, performance, schedutil
+  current policy: frequency should be within 408 MHz and 1.80 GHz.
+                  The governor "ondemand" may decide which speed to use
+                  within this range.
+  current CPU frequency is 408 MHz (asserted by call to hardware).
+  cpufreq stats: 408 MHz:96.79%, 600 MHz:0.72%, 816 MHz:0.10%, 1.10 GHz:0.00%, 1.42 GHz:0.01%, 1.61 GHz:0.01%, 1.80 GHz:2.37%  (337)
+analyzing CPU 3:
+  driver: cpufreq-dt
+  CPUs which run at the same hardware frequency: 0 1 2 3
+  CPUs which need to have their frequency coordinated by software: 0 1 2 3
+  maximum transition latency: 149 us.
+  hardware limits: 408 MHz - 1.80 GHz
+  available frequency steps: 408 MHz, 600 MHz, 816 MHz, 1.10 GHz, 1.42 GHz, 1.61 GHz, 1.80 GHz
+  available cpufreq governors: conservative, ondemand, userspace, powersave, performance, schedutil
+  current policy: frequency should be within 408 MHz and 1.80 GHz.
+                  The governor "ondemand" may decide which speed to use
+                  within this range.
+  current CPU frequency is 408 MHz (asserted by call to hardware).
+  cpufreq stats: 408 MHz:96.79%, 600 MHz:0.72%, 816 MHz:0.10%, 1.10 GHz:0.00%, 1.42 GHz:0.01%, 1.61 GHz:0.01%, 1.80 GHz:2.37%  (337)
+orangepi@orangepi3b:~$
+------------------------------------------------------------
+orangepi@orangepi3b:~$ cpufreq-info | grep stats
+  cpufreq stats: 408 MHz:96.83%, 600 MHz:0.72%, 816 MHz:0.10%, 1.10 GHz:0.00%, 1.42 GHz:0.01%, 1.61 GHz:0.01%, 1.80 GHz:2.33%  (341)
+  cpufreq stats: 408 MHz:96.83%, 600 MHz:0.72%, 816 MHz:0.10%, 1.10 GHz:0.00%, 1.42 GHz:0.01%, 1.61 GHz:0.01%, 1.80 GHz:2.33%  (341)
+  cpufreq stats: 408 MHz:96.83%, 600 MHz:0.72%, 816 MHz:0.10%, 1.10 GHz:0.00%, 1.42 GHz:0.01%, 1.61 GHz:0.01%, 1.80 GHz:2.33%  (341)
+  cpufreq stats: 408 MHz:96.83%, 600 MHz:0.72%, 816 MHz:0.10%, 1.10 GHz:0.00%, 1.42 GHz:0.01%, 1.61 GHz:0.01%, 1.80 GHz:2.33%  (341)
+------------------------------------------------------------
+
