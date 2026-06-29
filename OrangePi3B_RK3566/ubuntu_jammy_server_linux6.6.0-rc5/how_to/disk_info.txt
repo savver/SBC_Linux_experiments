@@ -1,0 +1,430 @@
+Linux orangepi3b 6.6.0-rc5-rockchip-rk356x #1.0.8 SMP PREEMPT Mon Nov 18 19:23:24 CST 2024 aarch64 aarch64 aarch64
+
+The system recognized the SSD drive immediately, without any additional 
+manipulations on my part.
+
+	df -h	  #also used/available space
+	lsblk
+	lsblk -f  #filesystems info
+	findmnt   #filesystems extend info
+	fdisk -l
+	fdisk -l | grep Disk
+	fdisk -l | grep /dev
+	blkid
+	cat /etc/fstab  #configuration file dictates which storage devices, 
+	                #partitions, and network shares are automatically mounted 
+					#at boot time
+					
+	dmesg | grep mmc
+	dmesg | grep nvme
+	
+	smartctl -a /dev/nvme0n1
+	sudo smartctl -x /dev/nvme0n1 #need sudo for more info
+	sudo smartctl -x /dev/nvme0n1 | grep 'Power On Hours'
+	sudo smartctl -x /dev/nvme0n1 | grep 'Power Cycles'
+	sudo smartctl -x /dev/nvme0n1 | grep 'Sensor'
+	sudo smartctl -x /dev/nvme0n1 | grep 'Serial'
+
+===============================================================================
+orangepi@orangepi3b:~$ df -h
+
+Filesystem      Size  Used Avail Use% Mounted on
+tmpfs           393M  5.5M  388M   2% /run
+/dev/mmcblk0p2   56G  2.1G   53G   4% /
+tmpfs           2.0G     0  2.0G   0% /dev/shm
+tmpfs           5.0M  4.0K  5.0M   1% /run/lock
+tmpfs           2.0G     0  2.0G   0% /tmp
+/dev/mmcblk0p1 1022M  110M  913M  11% /boot
+/dev/zram1       47M  1.6M   42M   4% /var/log
+tmpfs           393M     0  393M   0% /run/user/1000
+-------------------------------------------------------------------------------
+orangepi@orangepi3b:~$ lsblk
+
+NAME         MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+mtdblock0     31:0    0    16M  0 disk
+mmcblk0      179:0    0  57.6G  0 disk
+├─mmcblk0p1  179:1    0     1G  0 part /boot
+└─mmcblk0p2  179:2    0    56G  0 part /var/log.hdd
+                                       /
+mmcblk0boot0 179:32   0     4M  1 disk
+mmcblk0boot1 179:64   0     4M  1 disk
+zram0        252:0    0   1.9G  0 disk [SWAP]
+zram1        252:1    0    50M  0 disk /var/log
+zram2        252:2    0     0B  0 disk
+nvme0n1      259:0    0 232.9G  0 disk
+├─nvme0n1p1  259:1    0   512M  0 part
+└─nvme0n1p2  259:2    0 232.4G  0 part
+-------------------------------------------------------------------------------
+orangepi@orangepi3b:~$ lsblk -f
+
+NAME FSTYPE FSVER LABEL UUID                                 FSAVAIL FSUSE% MOUNTPOINTS
+mtdblock0
+
+mmcblk0
+│
+├─mmcblk0p1
+│    vfat   FAT32 opi_boot
+│                       F3B2-BD75                             912.1M    11% /boot
+└─mmcblk0p2
+     ext4   1.0   opi_root
+                        7aae6155-51e6-4c80-8391-8cde181deba5   52.4G     4% /var/log.hdd
+                                                                            /
+mmcblk0boot0
+
+mmcblk0boot1
+
+zram0
+                                                                            [SWAP]
+zram1
+                                                               41.7M     3% /var/log
+zram2
+
+nvme0n1
+│
+├─nvme0n1p1
+│    vfat   FAT32       4399-7EE6
+└─nvme0n1p2
+     ext4   1.0         9f23f7ba-dee7-41fa-b7fd-d2fe5957b205
+-------------------------------------------------------------------------------
+orangepi@orangepi3b:~$ findmnt
+	 
+TARGET                          SOURCE         FSTYPE  OPTIONS
+/                               /dev/mmcblk0p2 ext4    rw,noatime,errors=remount
+├─/sys                          sysfs          sysfs   rw,nosuid,nodev,noexec,re
+│ ├─/sys/kernel/security        securityfs     securit rw,nosuid,nodev,noexec,re
+│ ├─/sys/fs/cgroup              cgroup2        cgroup2 rw,nosuid,nodev,noexec,re
+│ ├─/sys/fs/pstore              pstore         pstore  rw,nosuid,nodev,noexec,re
+│ ├─/sys/fs/bpf                 bpf            bpf     rw,nosuid,nodev,noexec,re
+│ ├─/sys/kernel/debug           debugfs        debugfs rw,nosuid,nodev,noexec,re
+│ │ └─/sys/kernel/debug/tracing tracefs        tracefs rw,nosuid,nodev,noexec,re
+│ ├─/sys/kernel/tracing         tracefs        tracefs rw,nosuid,nodev,noexec,re
+│ ├─/sys/fs/fuse/connections    fusectl        fusectl rw,nosuid,nodev,noexec,re
+│ └─/sys/kernel/config          configfs       configf rw,nosuid,nodev,noexec,re
+├─/proc                         proc           proc    rw,nosuid,nodev,noexec,re
+│ └─/proc/sys/fs/binfmt_misc    systemd-1      autofs  rw,relatime,fd=29,pgrp=1,
+│   └─/proc/sys/fs/binfmt_misc  binfmt_misc    binfmt_ rw,nosuid,nodev,noexec,re
+├─/dev                          udev           devtmpf rw,nosuid,relatime,size=1
+│ ├─/dev/pts                    devpts         devpts  rw,nosuid,noexec,relatime
+│ ├─/dev/shm                    tmpfs          tmpfs   rw,nosuid,nodev
+│ ├─/dev/hugepages              hugetlbfs      hugetlb rw,relatime,pagesize=2M
+│ └─/dev/mqueue                 mqueue         mqueue  rw,nosuid,nodev,noexec,re
+├─/run                          tmpfs          tmpfs   rw,nosuid,nodev,noexec,re
+│ ├─/run/lock                   tmpfs          tmpfs   rw,nosuid,nodev,noexec,re
+│ ├─/run/credentials/systemd-sysusers.service
+│ │                             ramfs          ramfs   ro,nosuid,nodev,noexec,re
+│ ├─/run/rpc_pipefs             sunrpc         rpc_pip rw,relatime
+│ └─/run/user/1000              tmpfs          tmpfs   rw,nosuid,nodev,relatime,
+├─/tmp                          tmpfs          tmpfs   rw,nosuid,relatime
+├─/boot                         /dev/mmcblk0p1 vfat    rw,relatime,fmask=0022,dm
+├─/var/log.hdd                  /dev/mmcblk0p2[/var/log]
+│                                              ext4    rw,noatime,errors=remount
+└─/var/log                      /dev/zram1     ext4    rw,relatime,discard
+
+-------------------------------------------------------------------------------
+orangepi@orangepi3b:~$ fdisk -l
+
+Disk /dev/nvme0n1: 232.89 GiB, 250059350016 bytes, 488397168 sectors
+Disk model: Samsung SSD 970 EVO Plus 250GB
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: gpt
+Disk identifier: F4F17652-3671-4F27-8E94-9685ED5C51AC
+
+Device           Start       End   Sectors   Size Type
+/dev/nvme0n1p1    2048   1050623   1048576   512M EFI System
+/dev/nvme0n1p2 1050624 488396799 487346176 232.4G Linux filesystem
+
+
+Disk /dev/mmcblk0: 57.62 GiB, 61865984000 bytes, 120832000 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: gpt
+Disk identifier: E15A0B60-A013-8A4C-86A9-AF49524C4746
+
+Device           Start       End   Sectors Size Type
+/dev/mmcblk0p1   61440   2158591   2097152   1G Linux extended boot
+/dev/mmcblk0p2 2158592 119603199 117444608  56G Linux filesystem
+
+
+Disk /dev/mmcblk0boot0: 4 MiB, 4194304 bytes, 8192 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+
+Disk /dev/mmcblk0boot1: 4 MiB, 4194304 bytes, 8192 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+
+Disk /dev/mtdblock0: 16 MiB, 16777216 bytes, 32768 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+
+Disk /dev/zram0: 1.92 GiB, 2057469952 bytes, 502312 sectors
+Units: sectors of 1 * 4096 = 4096 bytes
+Sector size (logical/physical): 4096 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+
+
+Disk /dev/zram1: 50 MiB, 52428800 bytes, 12800 sectors
+Units: sectors of 1 * 4096 = 4096 bytes
+Sector size (logical/physical): 4096 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+
+-------------------------------------------------------------------------------
+orangepi@orangepi3b:~$ fdisk -l | grep Disk
+
+Disk /dev/nvme0n1: 232.89 GiB, 250059350016 bytes, 488397168 sectors
+Disk model: Samsung SSD 970 EVO Plus 250GB
+Disklabel type: gpt
+Disk identifier: F4F17652-3671-4F27-8E94-9685ED5C51AC
+Disk /dev/mmcblk0: 57.62 GiB, 61865984000 bytes, 120832000 sectors
+Disklabel type: gpt
+Disk identifier: E15A0B60-A013-8A4C-86A9-AF49524C4746
+Disk /dev/mmcblk0boot0: 4 MiB, 4194304 bytes, 8192 sectors
+Disk /dev/mmcblk0boot1: 4 MiB, 4194304 bytes, 8192 sectors
+Disk /dev/mtdblock0: 16 MiB, 16777216 bytes, 32768 sectors
+Disk /dev/zram0: 1.92 GiB, 2057469952 bytes, 502312 sectors
+Disk /dev/zram1: 50 MiB, 52428800 bytes, 12800 sectors
+
+-------------------------------------------------------------------------------
+orangepi@orangepi3b:~$ fdisk -l | grep /dev
+
+Disk /dev/nvme0n1: 232.89 GiB, 250059350016 bytes, 488397168 sectors
+/dev/nvme0n1p1    2048   1050623   1048576   512M EFI System
+/dev/nvme0n1p2 1050624 488396799 487346176 232.4G Linux filesystem
+Disk /dev/mmcblk0: 57.62 GiB, 61865984000 bytes, 120832000 sectors
+/dev/mmcblk0p1   61440   2158591   2097152   1G Linux extended boot
+/dev/mmcblk0p2 2158592 119603199 117444608  56G Linux filesystem
+Disk /dev/mmcblk0boot0: 4 MiB, 4194304 bytes, 8192 sectors
+Disk /dev/mmcblk0boot1: 4 MiB, 4194304 bytes, 8192 sectors
+Disk /dev/mtdblock0: 16 MiB, 16777216 bytes, 32768 sectors
+Disk /dev/zram0: 1.92 GiB, 2057469952 bytes, 502312 sectors
+Disk /dev/zram1: 50 MiB, 52428800 bytes, 12800 sectors
+
+-------------------------------------------------------------------------------
+orangepi@orangepi3b:~$ blkid
+
+/dev/nvme0n1p1: UUID="4399-7EE6" BLOCK_SIZE="512" TYPE="vfat" PARTLABEL="EFI System Partition" PARTUUID="0f34845e-4751-4640-96a2-08a2c590ef3e"
+/dev/nvme0n1p2: UUID="9f23f7ba-dee7-41fa-b7fd-d2fe5957b205" BLOCK_SIZE="4096" TYPE="ext4" PARTUUID="fa9539c5-8aa7-43bd-a65a-57c320207bd8"
+/dev/mmcblk0p1: LABEL_FATBOOT="opi_boot" LABEL="opi_boot" UUID="F3B2-BD75" BLOCK_SIZE="512" TYPE="vfat" PARTLABEL="bootfs" PARTUUID="acd39d98-d925-3c45-9d24-adfba442af9c"
+/dev/mmcblk0p2: LABEL="opi_root" UUID="7aae6155-51e6-4c80-8391-8cde181deba5" BLOCK_SIZE="4096" TYPE="ext4" PARTUUID="104f56e1-d239-eb45-b3a0-60645e5d7fb1"
+/dev/zram0: UUID="e998dca0-0b17-435f-a5ff-6c667dd4af7e" TYPE="swap"
+/dev/zram1: LABEL="log2ram" UUID="25f4628e-c3bd-44fa-89f1-29eaca3812ed" BLOCK_SIZE="4096" TYPE="ext4"
+
+-------------------------------------------------------------------------------
+orangepi@orangepi3b:~$ cat /etc/fstab
+
+UUID=7aae6155-51e6-4c80-8391-8cde181deba5 / ext4 defaults,noatime,commit=600,errors=remount-ro 0 1
+UUID=F3B2-BD75 /boot vfat defaults 0 2
+tmpfs /tmp tmpfs defaults,nosuid 0 0
+
+-------------------------------------------------------------------------------
+orangepi@orangepi3b:~$ dmesg | grep mmc
+
+[    1.411650] dwmmc_rockchip fe2c0000.mmc: IDMAC supports 32-bit address mode.
+[    1.411720] dwmmc_rockchip fe2c0000.mmc: Using internal DMA controller.
+[    1.411738] dwmmc_rockchip fe2c0000.mmc: Version ID is 270a
+[    1.411847] dwmmc_rockchip fe2c0000.mmc: DW MMC controller at irq 71,32 bit host data width,256 deep fifo
+[    1.412436] dwmmc_rockchip fe2c0000.mmc: allocated mmc-pwrseq
+[    1.412462] mmc_host mmc2: card is non-removable.
+[    1.413677] dwmmc_rockchip fe2b0000.mmc: IDMAC supports 32-bit address mode.
+[    1.413751] dwmmc_rockchip fe2b0000.mmc: Using internal DMA controller.
+[    1.413769] dwmmc_rockchip fe2b0000.mmc: Version ID is 270a
+[    1.413880] dwmmc_rockchip fe2b0000.mmc: DW MMC controller at irq 72,32 bit host data width,256 deep fifo
+[    1.427437] mmc_host mmc1: Bus speed (slot 0) = 375000Hz (slot req 400000Hz, actual 375000HZ div = 0)
+[    1.447404] mmc0: SDHCI controller on fe310000.mmc [fe310000.mmc] using ADMA
+[    1.560694] mmc0: new HS200 MMC card at address 0001
+[    1.562103] mmcblk0: mmc0:0001 A3A561 57.6 GiB
+[    1.568276]  mmcblk0: p1 p2
+[    1.569770] mmcblk0boot0: mmc0:0001 A3A561 4.00 MiB
+[    1.572717] mmcblk0boot1: mmc0:0001 A3A561 4.00 MiB
+[    1.575405] mmcblk0rpmb: mmc0:0001 A3A561 16.0 MiB, chardev (242:0)
+[    1.631515] mmc_host mmc2: Bus speed (slot 0) = 375000Hz (slot req 400000Hz, actual 375000HZ div = 0)
+[    1.749681] mmc_host mmc2: Bus speed (slot 0) = 150000000Hz (slot req 150000000Hz, actual 150000000HZ div = 0)
+[    2.023472] dwmmc_rockchip fe2c0000.mmc: Successfully tuned phase to 209
+[    2.030825] mmc2: new ultra high speed SDR104 SDIO card at address 0001
+[    5.576809] EXT4-fs (mmcblk0p2): mounted filesystem 7aae6155-51e6-4c80-8391-8cde181deba5 ro with writeback data mode. Quota mode: none.
+[    6.456018] block mmcblk0: the capability attribute has been deprecated.
+[   12.563081] EXT4-fs (mmcblk0p2): re-mounted 7aae6155-51e6-4c80-8391-8cde181deba5 r/w. Quota mode: none.
+[   14.064030] brcmfmac mmc2:0001:1: Direct firmware load for brcm/brcmfmac43456-sdio.rockchip,rk3566-orangepi-3b.bin failed with error -2
+[   14.075735] brcmfmac mmc2:0001:1: Direct firmware load for brcm/brcmfmac43456-sdio.clm_blob failed with error -2
+
+-------------------------------------------------------------------------------
+orangepi@orangepi3b:~$ dmesg | grep nvme
+
+[    1.214521] nvme nvme0: pci function 0000:01:00.0
+[    1.214574] nvme 0000:01:00.0: enabling device (0000 -> 0002)
+[    1.218036] nvme nvme0: missing or invalid SUBNQN field.
+[    1.218412] nvme nvme0: Shutdown timeout set to 8 seconds
+[    1.235613] nvme nvme0: 4/0/0 default/read/poll queues
+[    1.249125]  nvme0n1: p1 p2
+
+-------------------------------------------------------------------------------
+orangepi@orangepi3b:~$ smartctl -a /dev/nvme0n1
+
+smartctl 7.2 2020-12-30 r5155 [aarch64-linux-6.6.0-rc5-rockchip-rk356x] (local build)
+Copyright (C) 2002-20, Bruce Allen, Christian Franke, www.smartmontools.org
+
+=== START OF INFORMATION SECTION ===
+Model Number:                       Samsung SSD 970 EVO Plus 250GB
+Serial Number:                      S4EUNM0W806432M
+Firmware Version:                   2B2QEXM7
+PCI Vendor/Subsystem ID:            0x144d
+IEEE OUI Identifier:                0x002538
+Total NVM Capacity:                 250,059,350,016 [250 GB]
+Unallocated NVM Capacity:           0
+Controller ID:                      4
+NVMe Version:                       1.3
+Number of Namespaces:               1
+Namespace 1 Size/Capacity:          250,059,350,016 [250 GB]
+Namespace 1 Utilization:            50,070,310,912 [50.0 GB]
+Namespace 1 Formatted LBA Size:     512
+Namespace 1 IEEE EUI-64:            002538 583190fe9d
+Local Time is:                      Tue Nov 19 08:57:07 2024 UTC
+Firmware Updates (0x16):            3 Slots, no Reset required
+Optional Admin Commands (0x0017):   Security Format Frmw_DL Self_Test
+Optional NVM Commands (0x005f):     Comp Wr_Unc DS_Mngmt Wr_Zero Sav/Sel_Feat Timestmp
+Log Page Attributes (0x03):         S/H_per_NS Cmd_Eff_Lg
+Maximum Data Transfer Size:         512 Pages
+Warning  Comp. Temp. Threshold:     85 Celsius
+Critical Comp. Temp. Threshold:     85 Celsius
+
+Supported Power States
+St Op     Max   Active     Idle   RL RT WL WT  Ent_Lat  Ex_Lat
+ 0 +     7.80W       -        -    0  0  0  0        0       0
+ 1 +     6.00W       -        -    1  1  1  1        0       0
+ 2 +     3.40W       -        -    2  2  2  2        0       0
+ 3 -   0.0700W       -        -    3  3  3  3      210    1200
+ 4 -   0.0100W       -        -    4  4  4  4     2000    8000
+
+Supported LBA Sizes (NSID 0x1)
+Id Fmt  Data  Metadt  Rel_Perf
+ 0 +     512       0         0
+
+=== START OF SMART DATA SECTION ===
+Read NVMe SMART/Health Information failed: NVME_IOCTL_ADMIN_CMD: Permission denied
+-------------------------------------------------------------------------------
+orangepi@orangepi3b:~$ smartctl -i /dev/nvme0n1
+
+smartctl 7.2 2020-12-30 r5155 [aarch64-linux-6.6.0-rc5-rockchip-rk356x] (local build)
+Copyright (C) 2002-20, Bruce Allen, Christian Franke, www.smartmontools.org
+
+=== START OF INFORMATION SECTION ===
+Model Number:                       Samsung SSD 970 EVO Plus 250GB
+Serial Number:                      S4EUNM0W806432M
+Firmware Version:                   2B2QEXM7
+PCI Vendor/Subsystem ID:            0x144d
+IEEE OUI Identifier:                0x002538
+Total NVM Capacity:                 250,059,350,016 [250 GB]
+Unallocated NVM Capacity:           0
+Controller ID:                      4
+NVMe Version:                       1.3
+Number of Namespaces:               1
+Namespace 1 Size/Capacity:          250,059,350,016 [250 GB]
+Namespace 1 Utilization:            50,070,310,912 [50.0 GB]
+Namespace 1 Formatted LBA Size:     512
+Namespace 1 IEEE EUI-64:            002538 583190fe9d
+Local Time is:                      Tue Nov 19 08:59:46 2024 UTC
+
+-------------------------------------------------------------------------------
+orangepi@orangepi3b:~$ sudo smartctl -x /dev/nvme0n1
+
+[sudo] password for orangepi:
+smartctl 7.2 2020-12-30 r5155 [aarch64-linux-6.6.0-rc5-rockchip-rk356x] (local build)
+Copyright (C) 2002-20, Bruce Allen, Christian Franke, www.smartmontools.org
+
+=== START OF INFORMATION SECTION ===
+Model Number:                       Samsung SSD 970 EVO Plus 250GB
+Serial Number:                      S4EUNM0W806432M
+Firmware Version:                   2B2QEXM7
+PCI Vendor/Subsystem ID:            0x144d
+IEEE OUI Identifier:                0x002538
+Total NVM Capacity:                 250,059,350,016 [250 GB]
+Unallocated NVM Capacity:           0
+Controller ID:                      4
+NVMe Version:                       1.3
+Number of Namespaces:               1
+Namespace 1 Size/Capacity:          250,059,350,016 [250 GB]
+Namespace 1 Utilization:            50,070,310,912 [50.0 GB]
+Namespace 1 Formatted LBA Size:     512
+Namespace 1 IEEE EUI-64:            002538 583190fe9d
+Local Time is:                      Tue Nov 19 09:07:08 2024 UTC
+Firmware Updates (0x16):            3 Slots, no Reset required
+Optional Admin Commands (0x0017):   Security Format Frmw_DL Self_Test
+Optional NVM Commands (0x005f):     Comp Wr_Unc DS_Mngmt Wr_Zero Sav/Sel_Feat Timestmp
+Log Page Attributes (0x03):         S/H_per_NS Cmd_Eff_Lg
+Maximum Data Transfer Size:         512 Pages
+Warning  Comp. Temp. Threshold:     85 Celsius
+Critical Comp. Temp. Threshold:     85 Celsius
+
+Supported Power States
+St Op     Max   Active     Idle   RL RT WL WT  Ent_Lat  Ex_Lat
+ 0 +     7.80W       -        -    0  0  0  0        0       0
+ 1 +     6.00W       -        -    1  1  1  1        0       0
+ 2 +     3.40W       -        -    2  2  2  2        0       0
+ 3 -   0.0700W       -        -    3  3  3  3      210    1200
+ 4 -   0.0100W       -        -    4  4  4  4     2000    8000
+
+Supported LBA Sizes (NSID 0x1)
+Id Fmt  Data  Metadt  Rel_Perf
+ 0 +     512       0         0
+
+=== START OF SMART DATA SECTION ===
+SMART overall-health self-assessment test result: PASSED
+
+SMART/Health Information (NVMe Log 0x02)
+Critical Warning:                   0x00
+Temperature:                        42 Celsius
+Available Spare:                    100%
+Available Spare Threshold:          10%
+Percentage Used:                    0%
+Data Units Read:                    64,263 [32.9 GB]
+Data Units Written:                 196,558 [100 GB]
+Host Read Commands:                 809,758
+Host Write Commands:                2,005,411
+Controller Busy Time:               9
+Power Cycles:                       37
+Power On Hours:                     18
+Unsafe Shutdowns:                   33
+Media and Data Integrity Errors:    0
+Error Information Log Entries:      38
+Warning  Comp. Temperature Time:    0
+Critical Comp. Temperature Time:    0
+Temperature Sensor 1:               42 Celsius
+Temperature Sensor 2:               41 Celsius
+
+Error Information (NVMe Log 0x01, 16 of 64 entries)
+Num   ErrCount  SQId   CmdId  Status  PELoc          LBA  NSID    VS
+  0         38     0  0x300a  0x4004      -            0     0     -
+
+
+-------------------------------------------------------------------------------
+orangepi@orangepi3b:~$ sudo smartctl -x /dev/nvme0n1 | grep 'Power On Hours'
+Power On Hours:                     18
+-------------------------------------------------------------------------------
+orangepi@orangepi3b:~$ sudo smartctl -x /dev/nvme0n1 | grep 'Power Cycles'
+Power Cycles:                       37
+-------------------------------------------------------------------------------
+orangepi@orangepi3b:~$ sudo smartctl -x /dev/nvme0n1 | grep 'Temperature'
+Temperature:                        42 Celsius
+Warning  Comp. Temperature Time:    0
+Critical Comp. Temperature Time:    0
+Temperature Sensor 1:               42 Celsius
+Temperature Sensor 2:               41 Celsius
+-------------------------------------------------------------------------------
+orangepi@orangepi3b:~$ sudo smartctl -x /dev/nvme0n1 | grep 'Sensor'
+Temperature Sensor 1:               42 Celsius
+Temperature Sensor 2:               41 Celsius
+-------------------------------------------------------------------------------
+orangepi@orangepi3b:~$ sudo smartctl -x /dev/nvme0n1 | grep 'Serial'
+Serial Number:                      S4EUNM0W806432M
+-------------------------------------------------------------------------------
+
+
