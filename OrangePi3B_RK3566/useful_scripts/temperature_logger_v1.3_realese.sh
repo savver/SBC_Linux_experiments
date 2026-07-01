@@ -46,13 +46,13 @@
 #
 
 # --- User settings ---
-SLEEP_INTERVAL=10          # интервал между замерами (секунды)
-LOG_DIR="user_logs"        # папка для логов
+SLEEP_INTERVAL=10         
+LOG_DIR="user_logs"        
 
-WIDTH_DATETIME=20          # дата и время
-WIDTH_TEMP=14              # каждое поле температур
-WIDTH_FREQ=10              # каждое поле частот
-WIDTH_STAT=18              # каждое поле статистики (10 полей)
+WIDTH_DATETIME=20          
+WIDTH_TEMP=14             
+WIDTH_FREQ=6               
+WIDTH_STAT=18              
 
 #--- search last file (file with the biggest number) & create new file ---
 mkdir -p "$LOG_DIR"
@@ -126,7 +126,7 @@ calc_total_stats() {
     local total=$((d_user + d_nice + d_system + d_idle + d_iowait + d_irq + d_softirq + d_steal + d_guest + d_guest_nice))
     
     if [[ $total -eq 0 ]]; then
-        echo "total_user=0.0;total_nice=0.0;total_system=0.0;total_idle=0.0;total_iowait=0.0;total_irq=0.0;total_softirq=0.0;total_steal=0.0;total_guest=0.0;total_guest_nice=0.0"
+        echo "user=0.0;nice=0.0;system=0.0;idle=0.0;iowait=0.0;irq=0.0;softirq=0.0;steal=0.0;guest=0.0;guest_nice=0.0"
     else
         local p_user=$(awk "BEGIN {printf \"%.1f\", ($d_user * 100.0) / $total}")
         local p_nice=$(awk "BEGIN {printf \"%.1f\", ($d_nice * 100.0) / $total}")
@@ -138,7 +138,7 @@ calc_total_stats() {
         local p_steal=$(awk "BEGIN {printf \"%.1f\", ($d_steal * 100.0) / $total}")
         local p_guest=$(awk "BEGIN {printf \"%.1f\", ($d_guest * 100.0) / $total}")
         local p_guest_nice=$(awk "BEGIN {printf \"%.1f\", ($d_guest_nice * 100.0) / $total}")
-        echo "total_user=${p_user};total_nice=${p_nice};total_system=${p_system};total_idle=${p_idle};total_iowait=${p_iowait};total_irq=${p_irq};total_softirq=${p_softirq};total_steal=${p_steal};total_guest=${p_guest};total_guest_nice=${p_guest_nice}"
+        echo "user=${p_user};nice=${p_nice};system=${p_system};idle=${p_idle};iowait=${p_iowait};irq=${p_irq};softirq=${p_softirq};steal=${p_steal};guest=${p_guest};guest_nice=${p_guest_nice}"
     fi
 }
 
@@ -166,14 +166,19 @@ while true; do
 
     # ---- cpu frequence (individual) ----
     freqs=()
-    for cpu in /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq; do
-        if [[ -f "$cpu" ]]; then
-            freq=$(cat "$cpu" 2>/dev/null)
-            [[ -n "$freq" ]] && freqs+=("$freq") || freqs+=("N/A")
-        else
-            freqs+=("N/A")
-        fi
-    done
+	for cpu in /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq; do
+		if [[ -f "$cpu" ]]; then
+			freq=$(cat "$cpu" 2>/dev/null)
+			if [[ -n "$freq" && "$freq" != "N/A" ]]; then
+				freq_mhz=$((freq / 1000))
+				freqs+=("$freq_mhz")
+			else
+				freqs+=("N/A")
+			fi
+		else
+			freqs+=("N/A")
+		fi
+	done
     while [[ ${#freqs[@]} -lt 4 ]]; do
         freqs+=("N/A")
     done
@@ -190,17 +195,17 @@ while true; do
 
     temps="t_cpu=${cpu_temp};t_gpu=${gpu_temp};t_nvme_1=${nvme1};t_nvme_2=${nvme2};"
 
-    printf -v line "%-${WIDTH_DATETIME}s" "$datetime"
+    printf -v line "%-${WIDTH_DATETIME}s" "${datetime};"
     line+=" "
 
     for f in $(echo "$temps" | tr ';' '\n'); do
-        printf -v padded "%-${WIDTH_TEMP}s" "$f"
+        printf -v padded "%-${WIDTH_TEMP}s" "$f;"
         line+="$padded"
         line+=" "
     done
 
     for f in $(echo "$freq_str" | tr ';' '\n'); do
-        printf -v padded "%-${WIDTH_FREQ}s" "$f"
+        printf -v padded "%-${WIDTH_FREQ}s" "$f;"
         line+="$padded"
         line+=" "
     done
